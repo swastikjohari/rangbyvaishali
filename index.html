@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rang by Vaishali — Original Paintings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader">
+        <div class="loader-content">
+            <span class="loader-text">Rang</span>
+            <span class="loader-subtext">by Vaishali</span>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Floating Particles -->
+    <canvas id="particles-canvas"></canvas>
+    <!-- Navigation -->
+    <div class="scroll-progress"></div>
+    <nav class="navbar">
+        <a href="#" class="logo">Rang <span>by Vaishali</span></a>
+        <ul class="nav-links">
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="cart-btn" aria-label="Shopping cart">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <span class="cart-count">0</span>
+        </button>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-overlay"></div>
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <button class="cart-close" aria-label="Close cart">&times;</button>
+            </div>
+            <div class="cart-items">
+                <p class="cart-empty">Your cart is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total</span>
+                    <span class="cart-total-price">₹0</span>
+                </div>
+                <button class="btn btn-primary cart-checkout">Proceed to Checkout</button>
+            </div>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <!-- Animated paint blobs -->
+        <div class="hero-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <div class="blob blob-4"></div>
+        </div>
+        <!-- Paint drip decoration -->
+        <div class="paint-drips">
+            <svg class="drip drip-1" viewBox="0 0 30 120" fill="none"><path d="M15 0 C15 0 0 40 0 70 C0 90 7 120 15 120 C23 120 30 90 30 70 C30 40 15 0 15 0Z" fill="#c9a96e" opacity="0.3"/></svg>
+            <svg class="drip drip-2" viewBox="0 0 20 80" fill="none"><path d="M10 0 C10 0 0 27 0 47 C0 60 5 80 10 80 C15 80 20 60 20 47 C20 27 10 0 10 0Z" fill="#8b5e3c" opacity="0.2"/></svg>
+            <svg class="drip drip-3" viewBox="0 0 24 100" fill="none"><path d="M12 0 C12 0 0 33 0 58 C0 75 6 100 12 100 C18 100 24 75 24 58 C24 33 12 0 12 0Z" fill="#d4956a" opacity="0.25"/></svg>
+        </div>
+        <div class="hero-content">
+            <p class="hero-subtitle">Original handmade paintings</p>
+            <h1 class="hero-title">Where colours<br>tell stories</h1>
+            <p class="hero-description">Each piece is a unique expression of emotion, crafted with love by Vaishali. Bring home art that speaks to your soul.</p>
+            <a href="#gallery" class="btn btn-primary">Explore Collection</a>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-frame">
+                <img src="images/shiv-parvati.jpg" alt="Featured painting - Shiv Parvati by Vaishali" class="hero-painting">
+            </div>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="section-header reveal">
+            <h2>The Collection</h2>
+            <p>Each painting is one of a kind — made with acrylics, watercolours, and mixed media on canvas.</p>
+        </div>
+
+        <div class="gallery-filters reveal">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="portrait">Portrait</button>
+            <button class="filter-btn" data-filter="landscape">Landscape</button>
+            <button class="filter-btn" data-filter="spiritual">Spiritual</button>
+        </div>
+
+        <div class="gallery-grid stagger-children">
+            <div class="painting-card" data-category="portrait">
+                <div class="painting-image">
+                    <img src="images/poppy-girl.jpg" alt="Portrait of a woman with a red poppy flower - Acrylic painting by Vaishali">
+                </div>
+                <div class="painting-info">
+                    <h3>The Poppy Girl</h3>
+                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
+                    <div class="painting-footer">
+                        <span class="painting-price">₹14,500</span>
+                        <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painting-card" data-category="landscape">
+                <div class="painting-image">
+                    <img src="images/deep-blue.jpg" alt="Deep blue ocean waves seascape - Acrylic painting by Vaishali">
+                </div>
+                <div class="painting-info">
+                    <h3>Deep Blue</h3>
+                    <p class="painting-medium">Acrylic on Canvas • 24×30 in</p>
+                    <div class="painting-footer">
+                        <span class="painting-price">₹12,000</span>
+                        <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painting-card" data-category="landscape">
+                <div class="painting-image">
+                    <img src="images/golden-shore.jpg" alt="Tropical beach with golden sand and turquoise waves - Acrylic painting by Vaishali">
+                </div>
+                <div class="painting-info">
+                    <h3>Golden Shore</h3>
+                    <p class="painting-medium">Acrylic on Canvas • 20×28 in</p>
+                    <div class="painting-footer">
+                        <span class="painting-price">₹11,000</span>
+                        <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painting-card" data-category="spiritual">
+                <div class="painting-image">
+                    <img src="images/shiv-parvati.jpg" alt="Shiv and Parvati in blue and gold - Acrylic painting by Vaishali">
+                </div>
+                <div class="painting-info">
+                    <h3>Ardhanarishvara</h3>
+                    <p class="painting-medium">Acrylic on Canvas • 24×30 in</p>
+                    <div class="painting-footer">
+                        <span class="painting-price">₹18,000</span>
+                        <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painting-card" data-category="spiritual">
+                <div class="painting-image">
+                    <img src="images/radha-krishna.jpg" alt="Radha and Krishna in vibrant colours with peacock motif - Acrylic painting by Vaishali">
+                </div>
+                <div class="painting-info">
+                    <h3>Eternal Love</h3>
+                    <p class="painting-medium">Acrylic on Canvas • 30×20 in</p>
+                    <div class="painting-footer">
+                        <span class="painting-price">₹22,000</span>
+                        <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-content">
+            <div class="about-image reveal-left">
+                <img src="images/about.png" alt="Vaishali - Artist behind Rang" class="about-photo">
+            </div>
+            <div class="about-text reveal-right">
+                <h2>About the Artist</h2>
+                <p class="about-lead">Vaishali is a passionate artist whose bold use of colour and expressive brushwork brings every canvas to life.</p>
+                <p>From serene seascapes to vibrant spiritual art, her work spans portraits, landscapes, and Indian mythology — each piece telling its own story through rich acrylics and fearless colour palettes.</p>
+                <p>"Rang" means colour in Hindi — and this gallery is her way of sharing those colours with the world. Every painting is original, handmade, and one of a kind.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="section-header reveal">
+            <h2>What Collectors Say</h2>
+        </div>
+        <div class="testimonials-grid stagger-testimonials">
+            <div class="testimonial-card">
+                <p>"The painting brought so much warmth to our living room. You can feel the emotion in every brushstroke."</p>
+                <span class="testimonial-author">— Priya M., Mumbai</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Vaishali's art has a calming presence. It's become the centrepiece of my home office."</p>
+                <span class="testimonial-author">— Arjun S., Bangalore</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"I gifted one of her florals to my mother — she was moved to tears. Truly special work."</p>
+                <span class="testimonial-author">— Neha K., Delhi</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="section-header reveal">
+            <h2>Get in Touch</h2>
+            <p>Interested in a custom piece or have questions? Reach out — Vaishali would love to hear from you.</p>
+        </div>
+        <form class="contact-form" aria-label="Contact form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Tell us what you're looking for..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">Rang <span>by Vaishali</span></a>
+                <p>Original paintings, crafted with love.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="#gallery">Gallery</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Along</h4>
+                <a href="#" aria-label="Instagram">Instagram</a>
+                <a href="#" aria-label="Pinterest">Pinterest</a>
+                <a href="#" aria-label="WhatsApp">WhatsApp</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Rang by Vaishali. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
