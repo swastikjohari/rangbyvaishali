@@ -90,7 +90,8 @@ This is a static site — deploy anywhere:
 ## Author
 
 **Vaishali Johari** — Artist & Painter  
-Instagram: [@joharivaishali](https://www.instagram.com/joharivaishali/)
+Instagram: [@joharivaishali](https://www.instagram.com/joharivaishali/)  
+WhatsApp: [+91 9457162999](https://wa.me/919457162999)
 
 ---
 

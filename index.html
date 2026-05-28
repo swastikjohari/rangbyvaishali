@@ -39,30 +39,31 @@
             <span class="cart-count">0</span>
         </button>
 
-        <!-- Cart Sidebar -->
-        <div class="cart-overlay"></div>
-        <div class="cart-sidebar">
-            <div class="cart-header">
-                <h3>Your Cart</h3>
-                <button class="cart-close" aria-label="Close cart">&times;</button>
-            </div>
-            <div class="cart-items">
-                <p class="cart-empty">Your cart is empty</p>
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total</span>
-                    <span class="cart-total-price">₹0</span>
-                </div>
-                <button class="btn btn-primary cart-checkout">Proceed to Checkout</button>
-            </div>
-        </div>
         <button class="mobile-menu-btn" aria-label="Menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
     </nav>
+
+    <!-- Cart Panel (outside nav to avoid stacking context issues) -->
+    <div class="cart-overlay"></div>
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="cart-close" aria-label="Close cart">&times;</button>
+        </div>
+        <div class="cart-items">
+            <p class="cart-empty">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span class="cart-total-price">₹0</span>
+            </div>
+            <button class="btn btn-primary cart-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <header class="hero">
@@ -255,9 +256,8 @@
             </div>
             <div class="footer-social">
                 <h4>Follow Along</h4>
-                <a href="#" aria-label="Instagram">Instagram</a>
-                <a href="#" aria-label="Pinterest">Pinterest</a>
-                <a href="#" aria-label="WhatsApp">WhatsApp</a>
+                <a href="https://www.instagram.com/joharivaishali/" target="_blank" aria-label="Instagram">Instagram</a>
+                <a href="https://wa.me/919457162999" target="_blank" aria-label="WhatsApp">WhatsApp</a>
             </div>
         </div>
         <div class="footer-bottom">

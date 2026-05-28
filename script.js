@@ -5,11 +5,8 @@ window.addEventListener('load', () => {
     }, 2500);
 });
 
-// ===== Paint Splatter on Click =====
-document.addEventListener('click', (e) => {
-    // Don't splatter on buttons/links
-    if (e.target.closest('button, a, input, textarea')) return;
-
+// ===== Paint Splatter on Click/Tap =====
+function createSplatter(x, y) {
     const colors = ['#c9a96e', '#8b5e3c', '#d4956a', '#6bb5c9', '#e74c3c', '#8b4d7a', '#2d6e7e'];
     const splatterCount = Math.floor(Math.random() * 5) + 3;
 
@@ -28,8 +25,8 @@ document.addEventListener('click', (e) => {
             height: ${size}px;
             background: ${color};
             border-radius: ${Math.random() > 0.3 ? '50%' : '30% 70% 50% 60%'};
-            left: ${e.clientX}px;
-            top: ${e.clientY}px;
+            left: ${x}px;
+            top: ${y}px;
             pointer-events: none;
             z-index: 9999;
             opacity: 0.7;
@@ -45,6 +42,17 @@ document.addEventListener('click', (e) => {
 
         setTimeout(() => splat.remove(), 1200);
     }
+}
+
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button, a, input, textarea, .cart-sidebar, .cart-overlay')) return;
+    createSplatter(e.clientX, e.clientY);
+});
+
+document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('button, a, input, textarea, .cart-sidebar, .cart-overlay')) return;
+    const touch = e.touches[0];
+    createSplatter(touch.clientX, touch.clientY);
 });
 
 // ===== Scroll Progress Bar =====
