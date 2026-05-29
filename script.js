@@ -524,22 +524,6 @@ if (aboutText) {
     textObserver.observe(aboutText);
 }
 
-// ===== Image reveal with clip-path =====
-document.querySelectorAll('.painting-image img').forEach(img => {
-    img.style.clipPath = 'inset(100% 0 0 0)';
-    img.style.transition = 'clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
-
-    const imgObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.clipPath = 'inset(0 0 0 0)';
-                imgObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-    imgObserver.observe(img);
-});
-
 // ===== Typing effect for hero subtitle =====
 const heroSubtitle = document.querySelector('.hero-subtitle');
 if (heroSubtitle) {
