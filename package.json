@@ -1,0 +1,8 @@
+{
+  "name": "rangbyvaishali",
+  "version": "1.0.0",
+  "description": "Rang by Vaishali - Art Gallery E-commerce",
+  "dependencies": {
+    "razorpay": "^2.9.4"
+  }
+}
