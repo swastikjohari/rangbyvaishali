@@ -588,32 +588,72 @@ window.addEventListener('scroll', () => {
 });
 
 // ===== Razorpay Checkout =====
-const RAZORPAY_KEY_ID = 'rzp_test_Suz723WvzPz3iJ'; // Replace with your Razorpay Key ID
+const RAZORPAY_KEY_ID = 'rzp_test_Suz723WvzPz3iJ';
+const WHATSAPP_NUMBER = '919457162999';
 
-document.querySelector('.cart-checkout').addEventListener('click', async () => {
+const checkoutPanel = document.querySelector('.checkout-panel');
+const checkoutOverlay = document.querySelector('.checkout-overlay');
+const checkoutForm = document.getElementById('checkout-form');
+
+// Step 1: "Proceed to Checkout" opens shipping form
+document.querySelector('.cart-checkout').addEventListener('click', () => {
     if (cart.length === 0) {
         alert('Your cart is empty. Add some paintings first!');
         return;
     }
 
-    // Calculate total in rupees
     const total = cart.reduce((sum, item) => {
         return sum + parseInt(item.price.replace(/[^0-9]/g, ''));
     }, 0);
 
-    const checkoutBtn = document.querySelector('.cart-checkout');
-    checkoutBtn.textContent = 'Processing...';
-    checkoutBtn.style.opacity = '0.7';
+    document.querySelector('.checkout-total').textContent = '\u20B9' + total.toLocaleString('en-IN');
+
+    closeCart();
+    setTimeout(() => {
+        checkoutPanel.classList.add('open');
+        checkoutOverlay.classList.add('open');
+    }, 300);
+});
+
+// Close checkout panel
+document.querySelector('.checkout-close').addEventListener('click', closeCheckout);
+checkoutOverlay.addEventListener('click', closeCheckout);
+
+function closeCheckout() {
+    checkoutPanel.classList.remove('open');
+    checkoutOverlay.classList.remove('open');
+}
+
+// Step 2: Submit shipping form then open Razorpay
+checkoutForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const shippingInfo = {
+        name: document.getElementById('ship-name').value,
+        phone: document.getElementById('ship-phone').value,
+        email: document.getElementById('ship-email').value,
+        address: document.getElementById('ship-address').value,
+        city: document.getElementById('ship-city').value,
+        pincode: document.getElementById('ship-pincode').value,
+        state: document.getElementById('ship-state').value,
+    };
+
+    const total = cart.reduce((sum, item) => {
+        return sum + parseInt(item.price.replace(/[^0-9]/g, ''));
+    }, 0);
+
+    const payBtn = document.querySelector('.checkout-pay-btn');
+    payBtn.textContent = 'Processing...';
+    payBtn.style.opacity = '0.7';
 
     try {
-        // Create order via Netlify function
         const response = await fetch('/.netlify/functions/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 amount: total,
                 currency: 'INR',
-                receipt: `rang_${Date.now()}`
+                receipt: 'rang_' + Date.now()
             })
         });
 
@@ -623,7 +663,6 @@ document.querySelector('.cart-checkout').addEventListener('click', async () => {
             throw new Error(order.error || 'Failed to create order');
         }
 
-        // Open Razorpay checkout
         const options = {
             key: RAZORPAY_KEY_ID,
             amount: order.amount,
@@ -631,74 +670,74 @@ document.querySelector('.cart-checkout').addEventListener('click', async () => {
             name: 'Rang by Vaishali',
             description: cart.map(item => item.name).join(', '),
             order_id: order.id,
-            handler: function (response) {
-                // Payment successful
-                closeCart();
-                showPaymentSuccess(response);
+            prefill: {
+                name: shippingInfo.name,
+                email: shippingInfo.email,
+                contact: shippingInfo.phone
+            },
+            theme: { color: '#8b5e3c' },
+            handler: function (paymentResponse) {
+                closeCheckout();
+                sendWhatsAppNotification(shippingInfo, paymentResponse);
+                showPaymentSuccess(paymentResponse, shippingInfo);
                 cart = [];
                 updateCartCount();
                 renderCart();
-            },
-            prefill: {
-                name: '',
-                email: '',
-                contact: ''
-            },
-            theme: {
-                color: '#8b5e3c'
+                checkoutForm.reset();
             },
             modal: {
                 ondismiss: function () {
-                    checkoutBtn.textContent = 'Proceed to Checkout';
-                    checkoutBtn.style.opacity = '1';
+                    payBtn.textContent = 'Pay Now';
+                    payBtn.style.opacity = '1';
                 }
             }
         };
 
         const rzp = new Razorpay(options);
         rzp.open();
-
-        checkoutBtn.textContent = 'Proceed to Checkout';
-        checkoutBtn.style.opacity = '1';
+        payBtn.textContent = 'Pay Now';
+        payBtn.style.opacity = '1';
 
     } catch (error) {
         console.error('Checkout error:', error);
-        checkoutBtn.textContent = 'Proceed to Checkout';
-        checkoutBtn.style.opacity = '1';
+        payBtn.textContent = 'Pay Now';
+        payBtn.style.opacity = '1';
         alert('Something went wrong. Please try again or contact us on WhatsApp.');
     }
 });
 
-// Payment success overlay
-function showPaymentSuccess(response) {
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(250, 248, 245, 0.97);
-        z-index: 99999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        animation: fadeIn 0.5s ease;
-    `;
-    overlay.innerHTML = `
-        <div style="text-align: center; padding: 40px;">
-            <div style="font-size: 4rem; margin-bottom: 16px;">🎨</div>
-            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; margin-bottom: 12px; color: #2c2c2c;">Thank You!</h2>
-            <p style="color: #6b6b6b; font-size: 1.1rem; margin-bottom: 8px;">Your payment was successful.</p>
-            <p style="color: #6b6b6b; font-size: 0.9rem; margin-bottom: 24px;">Vaishali will reach out to you shortly about shipping.</p>
-            <p style="color: #8b5e3c; font-size: 0.8rem; margin-bottom: 32px;">Payment ID: ${response.razorpay_payment_id}</p>
-            <button onclick="this.parentElement.parentElement.remove()" style="padding: 14px 32px; background: #8b5e3c; color: #fff; border: none; border-radius: 2px; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;">Continue Browsing</button>
-        </div>
-    `;
-    document.body.appendChild(overlay);
+// Step 3: Send order to Vaishali's WhatsApp
+function sendWhatsAppNotification(shipping, payment) {
+    const items = cart.map(item => '- ' + item.name + ' (' + item.price + ')').join('\n');
+    const total = cart.reduce((sum, item) => sum + parseInt(item.price.replace(/[^0-9]/g, '')), 0);
 
-    // Confetti celebration
-    const btn = overlay.querySelector('button');
-    setTimeout(() => createConfetti(btn), 300);
+    const message = '🎨 *NEW ORDER - Rang by Vaishali*\n\n' +
+        '*Customer:* ' + shipping.name + '\n' +
+        '*Phone:* ' + shipping.phone + '\n' +
+        '*Email:* ' + shipping.email + '\n\n' +
+        '*Shipping Address:*\n' + shipping.address + '\n' + shipping.city + ', ' + shipping.state + ' - ' + shipping.pincode + '\n\n' +
+        '*Items:*\n' + items + '\n\n' +
+        '*Total Paid:* Rs.' + total.toLocaleString('en-IN') + '\n' +
+        '*Payment ID:* ' + payment.razorpay_payment_id + '\n\n' +
+        'Payment confirmed via Razorpay';
+
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+}
+
+// Payment success screen
+function showPaymentSuccess(response, shipping) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(250,248,245,0.97);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;';
+    overlay.innerHTML = '<div style="text-align:center;padding:40px;max-width:500px;">' +
+        '<div style="font-size:4rem;margin-bottom:16px;">🎨</div>' +
+        '<h2 style="font-family:Cormorant Garamond,serif;font-size:2.5rem;margin-bottom:12px;color:#2c2c2c;">Thank You, ' + shipping.name + '!</h2>' +
+        '<p style="color:#6b6b6b;font-size:1.1rem;margin-bottom:8px;">Your payment was successful.</p>' +
+        '<p style="color:#6b6b6b;font-size:0.9rem;margin-bottom:8px;">Your painting will be carefully packed and shipped to:</p>' +
+        '<p style="color:#2c2c2c;font-size:0.9rem;margin-bottom:20px;font-weight:500;">' + shipping.address + ', ' + shipping.city + ' - ' + shipping.pincode + '</p>' +
+        '<p style="color:#8b5e3c;font-size:0.8rem;margin-bottom:32px;">Payment ID: ' + response.razorpay_payment_id + '</p>' +
+        '<p style="color:#6b6b6b;font-size:0.85rem;margin-bottom:24px;">Vaishali will contact you on WhatsApp with shipping updates 📦</p>' +
+        '<button onclick="this.parentElement.parentElement.remove()" style="padding:14px 32px;background:#8b5e3c;color:#fff;border:none;border-radius:2px;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;">Continue Browsing</button>' +
+        '</div>';
+    document.body.appendChild(overlay);
+    setTimeout(() => createConfetti(overlay.querySelector('button')), 300);
 }

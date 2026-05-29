@@ -65,6 +65,52 @@
         </div>
     </div>
 
+    <!-- Checkout Shipping Form (hidden by default) -->
+    <div class="checkout-overlay"></div>
+    <div class="checkout-panel">
+        <div class="cart-header">
+            <h3>Shipping Details</h3>
+            <button class="checkout-close" aria-label="Close">&times;</button>
+        </div>
+        <form class="checkout-form" id="checkout-form">
+            <div class="form-group">
+                <label for="ship-name">Full Name *</label>
+                <input type="text" id="ship-name" name="name" required placeholder="Your full name">
+            </div>
+            <div class="form-group">
+                <label for="ship-phone">Phone Number *</label>
+                <input type="tel" id="ship-phone" name="phone" required placeholder="+91 9876543210">
+            </div>
+            <div class="form-group">
+                <label for="ship-email">Email *</label>
+                <input type="email" id="ship-email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="ship-address">Address *</label>
+                <textarea id="ship-address" name="address" rows="3" required placeholder="House/Flat No., Street, Landmark"></textarea>
+            </div>
+            <div class="checkout-form-row">
+                <div class="form-group">
+                    <label for="ship-city">City *</label>
+                    <input type="text" id="ship-city" name="city" required placeholder="City">
+                </div>
+                <div class="form-group">
+                    <label for="ship-pincode">Pincode *</label>
+                    <input type="text" id="ship-pincode" name="pincode" required placeholder="110001" pattern="[0-9]{6}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ship-state">State *</label>
+                <input type="text" id="ship-state" name="state" required placeholder="State">
+            </div>
+            <div class="checkout-summary">
+                <span>Order Total:</span>
+                <span class="checkout-total">₹0</span>
+            </div>
+            <button type="submit" class="btn btn-primary checkout-pay-btn">Pay Now</button>
+        </form>
+    </div>
+
     <!-- Hero Section -->
     <header class="hero">
         <!-- Animated paint blobs -->
