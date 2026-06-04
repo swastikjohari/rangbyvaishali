@@ -121,13 +121,27 @@ h2 {
     font-family: var(--font-display);
     font-size: 1.6rem;
     font-weight: 500;
-    color: var(--color-text);
     margin-right: auto;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #c9a96e, #8b5e3c, #8b4d7a, #6bb5c9, #e74c3c);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: logoHue 5s linear infinite;
+}
+
+@keyframes logoHue {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
 }
 
 .logo span {
     font-weight: 300;
     font-style: italic;
+    -webkit-text-fill-color: initial;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
     color: var(--color-text-muted);
 }
 
@@ -947,13 +961,22 @@ h2 {
 }
 
 .footer .logo {
-    color: #fff;
     margin-bottom: 12px;
     display: inline-block;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #c9a96e, #fff, #8b4d7a, #6bb5c9, #e74c3c);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: logoHue 5s linear infinite;
 }
 
 .footer .logo span {
     color: rgba(255, 255, 255, 0.6);
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
 }
 
 .footer-brand p {
@@ -1024,10 +1047,14 @@ h2 {
 .loader-text {
     font-family: var(--font-display);
     font-size: 4rem;
-    color: var(--color-accent);
     display: block;
     margin-bottom: 4px;
-    animation: loaderPulse 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #c9a96e, #8b5e3c, #8b4d7a, #6bb5c9, #e74c3c);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: logoHue 3s linear infinite;
 }
 
 .loader-subtext {

@@ -662,7 +662,8 @@ checkoutForm.addEventListener('submit', async (e) => {
             theme: { color: '#8b5e3c' },
             handler: function (paymentResponse) {
                 closeCheckout();
-                sendWhatsAppNotification(shippingInfo, paymentResponse);
+                // Automatically send order details to Vaishali
+                sendOrderNotification(shippingInfo, paymentResponse);
                 showPaymentSuccess(paymentResponse, shippingInfo);
                 cart = [];
                 updateCartCount();
@@ -690,22 +691,24 @@ checkoutForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Step 3: Send order to Vaishali's WhatsApp
-function sendWhatsAppNotification(shipping, payment) {
-    const items = cart.map(item => '- ' + item.name + ' (' + item.price + ')').join('\n');
+// Step 3: Automatically send order details to Vaishali (server-side)
+async function sendOrderNotification(shipping, payment) {
     const total = cart.reduce((sum, item) => sum + parseInt(item.price.replace(/[^0-9]/g, '')), 0);
 
-    const message = '🎨 *NEW ORDER - Rang by Vaishali*\n\n' +
-        '*Customer:* ' + shipping.name + '\n' +
-        '*Phone:* ' + shipping.phone + '\n' +
-        '*Email:* ' + shipping.email + '\n\n' +
-        '*Shipping Address:*\n' + shipping.address + '\n' + shipping.city + ', ' + shipping.state + ' - ' + shipping.pincode + '\n\n' +
-        '*Items:*\n' + items + '\n\n' +
-        '*Total Paid:* Rs.' + total.toLocaleString('en-IN') + '\n' +
-        '*Payment ID:* ' + payment.razorpay_payment_id + '\n\n' +
-        'Payment confirmed via Razorpay';
-
-    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+    try {
+        await fetch('/.netlify/functions/send-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                shipping: shipping,
+                items: cart.map(item => ({ name: item.name, price: item.price })),
+                total: total.toLocaleString('en-IN'),
+                paymentId: payment.razorpay_payment_id
+            })
+        });
+    } catch (error) {
+        console.error('Failed to send notification:', error);
+    }
 }
 
 // Payment success screen
