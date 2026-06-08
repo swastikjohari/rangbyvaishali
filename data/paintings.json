@@ -5,35 +5,40 @@
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹2,999",
       "image": "images/poppy-girl.jpg",
-      "category": "portrait"
+      "category": "portrait",
+      "sold": false
     },
     {
       "name": "Deep Blue",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,499",
       "image": "images/deep-blue.jpg",
-      "category": "landscape"
+      "category": "landscape",
+      "sold": false
     },
     {
       "name": "Golden Shore",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
       "image": "images/golden-shore.jpg",
-      "category": "landscape"
+      "category": "landscape",
+      "sold": false
     },
     {
       "name": "Ardhanarishvara",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
       "image": "images/shiv-parvati.jpg",
-      "category": "spiritual"
+      "category": "spiritual",
+      "sold": false
     },
     {
       "name": "Eternal Love",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
       "image": "images/radha-krishna.jpg",
-      "category": "spiritual"
+      "category": "spiritual",
+      "sold": false
     }
   ]
 }

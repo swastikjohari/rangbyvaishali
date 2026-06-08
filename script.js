@@ -172,12 +172,70 @@ sectionHeaders.forEach(el => headerObserver.observe(el));
 let cart = [];
 const cartCountEl = document.querySelector('.cart-count');
 
+const MANAGE_MODE = new URLSearchParams(window.location.search).get('manage') === '1';
+
 function markCardSold(paintingId) {
     const card = document.querySelector(`.painting-card[data-id="${paintingId}"]`);
     if (!card) return;
     card.classList.add('sold-out');
     const btn = card.querySelector('.add-to-cart');
     if (btn) btn.textContent = 'Sold Out';
+    if (MANAGE_MODE) updateManageBtn(card, true);
+}
+
+function updateManageBtn(card, isSold) {
+    let btn = card.querySelector('.manage-toggle-btn');
+    if (!btn) return;
+    btn.textContent = isSold ? '🔓 Mark as Available' : '🔒 Mark as Sold';
+    btn.style.background = isSold ? '#4a7c59' : '#c0392b';
+}
+
+function addManageButtons() {
+    document.querySelectorAll('.painting-card').forEach(card => {
+        const btn = document.createElement('button');
+        btn.className = 'manage-toggle-btn';
+        const isSold = card.classList.contains('sold-out');
+        btn.textContent = isSold ? '🔓 Mark as Available' : '🔒 Mark as Sold';
+        btn.style.cssText = `
+            width: 100%; margin-top: 10px; padding: 8px;
+            background: ${isSold ? '#4a7c59' : '#c0392b'}; color: #fff;
+            border: none; border-radius: 2px; cursor: pointer;
+            font-size: 0.78rem; letter-spacing: 0.05em;
+        `;
+        btn.addEventListener('click', async () => {
+            const paintingId = card.dataset.id;
+            const selling = !card.classList.contains('sold-out');
+            btn.textContent = 'Updating...';
+            btn.disabled = true;
+            try {
+                const endpoint = selling ? '/.netlify/functions/mark-sold' : '/.netlify/functions/unmark-sold';
+                const bodyData = selling ? { paintingIds: [paintingId] } : { paintingId };
+                await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+                if (selling) {
+                    card.classList.add('sold-out');
+                    card.querySelector('.add-to-cart').textContent = 'Sold Out';
+                } else {
+                    card.classList.remove('sold-out');
+                    card.querySelector('.add-to-cart').textContent = 'Add to Cart';
+                }
+                updateManageBtn(card, selling);
+            } catch {
+                btn.textContent = 'Error — try again';
+            }
+            btn.disabled = false;
+        });
+        card.querySelector('.painting-info').appendChild(btn);
+    });
+
+    // Show a banner so it's clear manage mode is on
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#2c2c2c;color:#fff;text-align:center;padding:10px;font-size:0.85rem;z-index:9999;';
+    banner.textContent = '⚙️ Manage Mode — toggle sold/available on any painting';
+    document.body.appendChild(banner);
 }
 
 // ===== Dynamic Gallery =====
@@ -189,8 +247,10 @@ function renderGallery(paintings) {
     const grid = document.getElementById('gallery-grid');
     grid.innerHTML = paintings.map(p => {
         const id = paintingIdFromName(p.name);
+        const soldClass = p.sold ? ' sold-out' : '';
+        const btnText = p.sold ? 'Sold Out' : 'Add to Cart';
         return `
-        <div class="painting-card" data-category="${p.category}" data-id="${id}">
+        <div class="painting-card${soldClass}" data-category="${p.category}" data-id="${id}">
             <div class="painting-image">
                 <img src="${p.image}" alt="${p.name} - Acrylic painting by Vaishali" loading="lazy">
             </div>
@@ -199,7 +259,7 @@ function renderGallery(paintings) {
                 <p class="painting-medium">${p.medium}</p>
                 <div class="painting-footer">
                     <span class="painting-price">${p.price}</span>
-                    <button class="btn btn-small add-to-cart">Add to Cart</button>
+                    <button class="btn btn-small add-to-cart">${btnText}</button>
                 </div>
             </div>
         </div>`;
@@ -283,11 +343,7 @@ fetch('/data/paintings.json')
     .then(data => {
         renderGallery(data.paintings || []);
         initPaintingCards();
-        // Load sold status after cards exist in DOM
-        fetch('/.netlify/functions/get-sold')
-            .then(r => r.json())
-            .then(soldIds => soldIds.forEach(id => markCardSold(id)))
-            .catch(() => {});
+        // sold status is read directly from paintings.json (managed via /admin)
     })
     .catch(() => {
         document.getElementById('gallery-grid').innerHTML =
@@ -707,16 +763,6 @@ checkoutForm.addEventListener('submit', async (e) => {
                     alert('Could not verify payment. Please contact us with your Payment ID: ' + paymentResponse.razorpay_payment_id);
                     return;
                 }
-                // Mark paintings as sold
-                const soldIds = cart.map(item => item.paintingId).filter(Boolean);
-                if (soldIds.length) {
-                    fetch('/.netlify/functions/mark-sold', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ paintingIds: soldIds })
-                    }).then(() => soldIds.forEach(id => markCardSold(id))).catch(() => {});
-                }
-
                 closeCheckout();
                 sendOrderNotification(shippingInfo, paymentResponse);
                 showPaymentSuccess(paymentResponse, shippingInfo);

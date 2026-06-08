@@ -24,3 +24,4 @@ collections:
               - { label: Price, name: price, widget: string, hint: "e.g. ₹2,999" }
               - { label: Image, name: image, widget: image }
               - { label: Category, name: category, widget: select, options: [portrait, landscape, spiritual, abstract, floral] }
+              - { label: Sold Out, name: sold, widget: boolean, default: false, hint: "Toggle on when this painting is sold" }
