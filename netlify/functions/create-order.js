@@ -5,7 +5,19 @@ exports.handler = async (event) => {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const { amount, currency = 'INR', receipt } = JSON.parse(event.body);
+    let body;
+    try {
+        body = JSON.parse(event.body);
+    } catch {
+        return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
+    }
+
+    const { amount, currency = 'INR', receipt } = body;
+    const amountPaise = Math.round(amount * 100);
+
+    if (!amount || amountPaise < 100) {
+        return { statusCode: 400, body: JSON.stringify({ error: 'Amount must be at least ₹1' }) };
+    }
 
     const razorpay = new Razorpay({
         key_id: process.env.RAZORPAY_KEY_ID,
@@ -14,7 +26,7 @@ exports.handler = async (event) => {
 
     try {
         const order = await razorpay.orders.create({
-            amount: amount * 100, // Razorpay expects amount in paise
+            amount: amountPaise, // in paise
             currency,
             receipt: receipt || `order_${Date.now()}`,
         });

@@ -119,8 +119,8 @@ h2 {
 
 .logo {
     font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 500;
+    font-size: 2.6rem;
+    font-weight: 600;
     margin-right: auto;
     background: linear-gradient(90deg, #e74c3c, #f39c12, #c9a96e, #8b5e3c, #8b4d7a, #6bb5c9, #e74c3c);
     background-size: 300% auto;
@@ -136,13 +136,16 @@ h2 {
 }
 
 .logo span {
-    font-weight: 300;
-    font-style: italic;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 1rem;
     -webkit-text-fill-color: initial;
     background: none;
     -webkit-background-clip: initial;
     background-clip: initial;
     color: var(--color-text-muted);
+    margin-left: 6px;
 }
 
 .nav-links {
@@ -972,6 +975,10 @@ h2 {
 }
 
 .footer .logo span {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.6);
     -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
     background: none;
@@ -1058,10 +1065,10 @@ h2 {
 }
 
 .loader-subtext {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
     color: var(--color-text-muted);
-    font-style: italic;
+    font-style: normal;
     display: block;
     margin-bottom: 24px;
     opacity: 0;

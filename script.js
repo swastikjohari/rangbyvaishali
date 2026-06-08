@@ -572,7 +572,7 @@ window.addEventListener('scroll', () => {
 });
 
 // ===== Razorpay Checkout =====
-const RAZORPAY_KEY_ID = 'rzp_test_Suz723WvzPz3iJ';
+const RAZORPAY_KEY_ID = 'rzp_test_Sz41e5EQycslxR';
 const WHATSAPP_NUMBER = '919457162999';
 
 const checkoutPanel = document.querySelector('.checkout-panel');
@@ -660,9 +660,24 @@ checkoutForm.addEventListener('submit', async (e) => {
                 contact: shippingInfo.phone
             },
             theme: { color: '#8b5e3c' },
-            handler: function (paymentResponse) {
+            handler: async function (paymentResponse) {
+                try {
+                    const verifyRes = await fetch('/.netlify/functions/verify-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(paymentResponse)
+                    });
+                    const verifyData = await verifyRes.json();
+                    if (!verifyRes.ok || !verifyData.verified) {
+                        alert('Payment verification failed. Please contact us with your Payment ID: ' + paymentResponse.razorpay_payment_id);
+                        return;
+                    }
+                } catch (err) {
+                    console.error('Verification error:', err);
+                    alert('Could not verify payment. Please contact us with your Payment ID: ' + paymentResponse.razorpay_payment_id);
+                    return;
+                }
                 closeCheckout();
-                // Automatically send order details to Vaishali
                 sendOrderNotification(shippingInfo, paymentResponse);
                 showPaymentSuccess(paymentResponse, shippingInfo);
                 cart = [];
