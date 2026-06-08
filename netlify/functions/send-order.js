@@ -17,9 +17,25 @@ exports.handler = async (event) => {
         `Payment ID: ${paymentId}\n\n` +
         `✅ Payment confirmed via Razorpay`;
 
+    const results = await Promise.allSettled([
+        sendEmail(shipping, message, total),
+        sendWhatsApp(message),
+    ]);
+
+    const emailOk = results[0].status === 'fulfilled' && results[0].value;
+    const waOk = results[1].status === 'fulfilled' && results[1].value;
+
+    return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailOk, whatsapp: waOk }),
+    };
+};
+
+async function sendEmail(shipping, message, total) {
+    if (!process.env.WEB3FORMS_KEY) return false;
     try {
-        // Send via Web3Forms (free email API)
-        const response = await fetch('https://api.web3forms.com/submit', {
+        const res = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -27,28 +43,27 @@ exports.handler = async (event) => {
                 subject: `🎨 New Order: ${shipping.name} - ₹${total}`,
                 from_name: 'Rang by Vaishali',
                 to: process.env.NOTIFICATION_EMAIL,
-                message: message,
-                // Also send customer a confirmation
+                message,
                 replyto: shipping.email,
-            })
+            }),
         });
-
-        const result = await response.json();
-
-        if (result.success) {
-            return {
-                statusCode: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ success: true }),
-            };
-        } else {
-            throw new Error(result.message || 'Email send failed');
-        }
-    } catch (error) {
-        console.error('Send order error:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: error.message }),
-        };
+        const data = await res.json();
+        return data.success === true;
+    } catch {
+        return false;
     }
-};
+}
+
+async function sendWhatsApp(message) {
+    const apiKey = process.env.CALLMEBOT_APIKEY;
+    const phone = '918433192711';
+    if (!apiKey) return false;
+    try {
+        const encoded = encodeURIComponent(message);
+        const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encoded}&apikey=${apiKey}`;
+        const res = await fetch(url);
+        return res.ok;
+    } catch {
+        return false;
+    }
+}

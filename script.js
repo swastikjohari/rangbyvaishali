@@ -171,6 +171,21 @@ sectionHeaders.forEach(el => headerObserver.observe(el));
 // ===== Cart Functionality =====
 let cart = [];
 const cartCountEl = document.querySelector('.cart-count');
+
+// Load sold paintings and mark cards on page load
+fetch('/.netlify/functions/get-sold')
+    .then(r => r.json())
+    .then(soldIds => { soldIds.forEach(id => markCardSold(id)); })
+    .catch(() => {});
+
+function markCardSold(paintingId) {
+    const card = document.querySelector(`.painting-card[data-id="${paintingId}"]`);
+    if (!card) return;
+    card.classList.add('sold-out');
+    const btn = card.querySelector('.add-to-cart');
+    if (btn) btn.textContent = 'Sold Out';
+}
+
 const cartSidebar = document.querySelector('.cart-sidebar');
 const cartOverlay = document.querySelector('.cart-overlay');
 const cartItemsEl = document.querySelector('.cart-items');
@@ -235,10 +250,11 @@ function renderCart() {
 document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const card = btn.closest('.painting-card');
+        if (card.classList.contains('sold-out')) return;
         const name = card.querySelector('h3').textContent;
         const price = card.querySelector('.painting-price').textContent;
 
-        cart.push({ name, price });
+        cart.push({ name, price, paintingId: card.dataset.id });
         updateCartCount();
         renderCart();
 
@@ -681,6 +697,16 @@ checkoutForm.addEventListener('submit', async (e) => {
                     alert('Could not verify payment. Please contact us with your Payment ID: ' + paymentResponse.razorpay_payment_id);
                     return;
                 }
+                // Mark paintings as sold
+                const soldIds = cart.map(item => item.paintingId).filter(Boolean);
+                if (soldIds.length) {
+                    fetch('/.netlify/functions/mark-sold', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paintingIds: soldIds })
+                    }).then(() => soldIds.forEach(id => markCardSold(id))).catch(() => {});
+                }
+
                 closeCheckout();
                 sendOrderNotification(shippingInfo, paymentResponse);
                 showPaymentSuccess(paymentResponse, shippingInfo);

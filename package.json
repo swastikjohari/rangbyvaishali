@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Rang by Vaishali - Art Gallery E-commerce",
   "dependencies": {
+    "@netlify/blobs": "^10.7.9",
     "razorpay": "^2.9.4"
   }
 }
