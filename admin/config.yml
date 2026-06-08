@@ -1,0 +1,26 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: images
+public_folder: images
+
+collections:
+  - name: gallery
+    label: Gallery
+    files:
+      - name: paintings
+        label: Paintings
+        file: data/paintings.json
+        format: json
+        fields:
+          - label: Paintings
+            name: paintings
+            widget: list
+            summary: "{{fields.name}} — {{fields.price}}"
+            fields:
+              - { label: Painting Name, name: name, widget: string }
+              - { label: Medium & Size, name: medium, widget: string, hint: "e.g. Acrylic on Canvas • 18×24 in" }
+              - { label: Price, name: price, widget: string, hint: "e.g. ₹2,999" }
+              - { label: Image, name: image, widget: image }
+              - { label: Category, name: category, widget: select, options: [portrait, landscape, spiritual, abstract, floral] }

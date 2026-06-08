@@ -1,0 +1,39 @@
+{
+  "paintings": [
+    {
+      "name": "The Poppy Girl",
+      "medium": "Acrylic on Canvas • 18×24 in",
+      "price": "₹2,999",
+      "image": "images/poppy-girl.jpg",
+      "category": "portrait"
+    },
+    {
+      "name": "Deep Blue",
+      "medium": "Acrylic on Canvas • 18×24 in",
+      "price": "₹1,499",
+      "image": "images/deep-blue.jpg",
+      "category": "landscape"
+    },
+    {
+      "name": "Golden Shore",
+      "medium": "Acrylic on Canvas • 18×24 in",
+      "price": "₹1,999",
+      "image": "images/golden-shore.jpg",
+      "category": "landscape"
+    },
+    {
+      "name": "Ardhanarishvara",
+      "medium": "Acrylic on Canvas • 18×24 in",
+      "price": "₹1,999",
+      "image": "images/shiv-parvati.jpg",
+      "category": "spiritual"
+    },
+    {
+      "name": "Eternal Love",
+      "medium": "Acrylic on Canvas • 18×24 in",
+      "price": "₹1,999",
+      "image": "images/radha-krishna.jpg",
+      "category": "spiritual"
+    }
+  ]
+}

@@ -172,12 +172,6 @@ sectionHeaders.forEach(el => headerObserver.observe(el));
 let cart = [];
 const cartCountEl = document.querySelector('.cart-count');
 
-// Load sold paintings and mark cards on page load
-fetch('/.netlify/functions/get-sold')
-    .then(r => r.json())
-    .then(soldIds => { soldIds.forEach(id => markCardSold(id)); })
-    .catch(() => {});
-
 function markCardSold(paintingId) {
     const card = document.querySelector(`.painting-card[data-id="${paintingId}"]`);
     if (!card) return;
@@ -185,6 +179,120 @@ function markCardSold(paintingId) {
     const btn = card.querySelector('.add-to-cart');
     if (btn) btn.textContent = 'Sold Out';
 }
+
+// ===== Dynamic Gallery =====
+function paintingIdFromName(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function renderGallery(paintings) {
+    const grid = document.getElementById('gallery-grid');
+    grid.innerHTML = paintings.map(p => {
+        const id = paintingIdFromName(p.name);
+        return `
+        <div class="painting-card" data-category="${p.category}" data-id="${id}">
+            <div class="painting-image">
+                <img src="${p.image}" alt="${p.name} - Acrylic painting by Vaishali" loading="lazy">
+            </div>
+            <div class="painting-info">
+                <h3>${p.name}</h3>
+                <p class="painting-medium">${p.medium}</p>
+                <div class="painting-footer">
+                    <span class="painting-price">${p.price}</span>
+                    <button class="btn btn-small add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    // Stagger fade-in
+    document.querySelectorAll('.painting-card').forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(32px)';
+        card.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+        requestAnimationFrame(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        });
+    });
+}
+
+function initPaintingCards() {
+    // Add to cart
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const card = btn.closest('.painting-card');
+            if (card.classList.contains('sold-out')) return;
+            const name = card.querySelector('h3').textContent;
+            const price = card.querySelector('.painting-price').textContent;
+            cart.push({ name, price, paintingId: card.dataset.id });
+            updateCartCount();
+            renderCart();
+
+            const rect = btn.getBoundingClientRect();
+            const cartRect = document.querySelector('.cart-btn').getBoundingClientRect();
+            const flyEl = document.createElement('div');
+            flyEl.style.cssText = `position:fixed;width:14px;height:14px;background:var(--color-accent);border-radius:50%;z-index:9999;left:${rect.left + rect.width / 2}px;top:${rect.top}px;pointer-events:none;transition:all 0.7s cubic-bezier(0.25,0.46,0.45,0.94);`;
+            document.body.appendChild(flyEl);
+            requestAnimationFrame(() => {
+                flyEl.style.left = cartRect.left + cartRect.width / 2 + 'px';
+                flyEl.style.top = cartRect.top + 'px';
+                flyEl.style.opacity = '0';
+                flyEl.style.transform = 'scale(0.3)';
+            });
+            setTimeout(() => flyEl.remove(), 1000);
+
+            btn.textContent = 'Added ✓';
+            btn.style.background = 'var(--color-accent)';
+            btn.style.color = '#fff';
+            btn.style.borderColor = 'var(--color-accent)';
+            btn.style.transform = 'scale(1.15)';
+            setTimeout(() => {
+                btn.textContent = 'Add to Cart';
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+                btn.style.transform = '';
+            }, 2000);
+        });
+    });
+
+    // 3D tilt
+    document.querySelectorAll('.painting-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = (y - rect.height / 2) / 15;
+            const rotateY = (rect.width / 2 - x) / 15;
+            card.style.transform = `translateY(-10px) perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+            card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 40px rgba(0,0,0,0.12)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.style.boxShadow = '';
+        });
+    });
+
+    // Price counter animation
+    document.querySelectorAll('.painting-price').forEach(el => priceObserver.observe(el));
+}
+
+fetch('/data/paintings.json')
+    .then(r => r.json())
+    .then(data => {
+        renderGallery(data.paintings || []);
+        initPaintingCards();
+        // Load sold status after cards exist in DOM
+        fetch('/.netlify/functions/get-sold')
+            .then(r => r.json())
+            .then(soldIds => soldIds.forEach(id => markCardSold(id)))
+            .catch(() => {});
+    })
+    .catch(() => {
+        document.getElementById('gallery-grid').innerHTML =
+            '<p style="text-align:center;padding:60px;color:var(--color-text-muted)">Gallery coming soon.</p>';
+    });
 
 const cartSidebar = document.querySelector('.cart-sidebar');
 const cartOverlay = document.querySelector('.cart-overlay');
@@ -247,81 +355,24 @@ function renderCart() {
     });
 }
 
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const card = btn.closest('.painting-card');
-        if (card.classList.contains('sold-out')) return;
-        const name = card.querySelector('h3').textContent;
-        const price = card.querySelector('.painting-price').textContent;
-
-        cart.push({ name, price, paintingId: card.dataset.id });
-        updateCartCount();
-        renderCart();
-
-        // Flying particle to cart
-        const rect = btn.getBoundingClientRect();
-        const cartRect = document.querySelector('.cart-btn').getBoundingClientRect();
-        const flyEl = document.createElement('div');
-        flyEl.style.cssText = `
-            position: fixed;
-            width: 14px;
-            height: 14px;
-            background: var(--color-accent);
-            border-radius: 50%;
-            z-index: 9999;
-            left: ${rect.left + rect.width / 2}px;
-            top: ${rect.top}px;
-            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-            box-shadow: 0 0 10px rgba(139, 94, 60, 0.5);
-        `;
-        document.body.appendChild(flyEl);
-        setTimeout(() => {
-            flyEl.style.left = cartRect.left + cartRect.width / 2 + 'px';
-            flyEl.style.top = cartRect.top + 'px';
-            flyEl.style.transform = 'scale(0)';
-            flyEl.style.opacity = '0';
-        }, 10);
-        setTimeout(() => flyEl.remove(), 1000);
-
-        // Button feedback
-        btn.textContent = 'Added ✓';
-        btn.style.background = 'var(--color-accent)';
-        btn.style.color = '#fff';
-        btn.style.borderColor = 'var(--color-accent)';
-        btn.style.transform = 'scale(1.15)';
-
-        setTimeout(() => {
-            btn.textContent = 'Add to Cart';
-            btn.style.background = '';
-            btn.style.color = '';
-            btn.style.borderColor = '';
-            btn.style.transform = '';
-        }, 2000);
-    });
-});
-
 // ===== Gallery Filter =====
 const filterBtns = document.querySelectorAll('.filter-btn');
-const paintingCards = document.querySelectorAll('.painting-card');
 
 filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const filter = btn.dataset.filter;
         let delay = 0;
-
-        paintingCards.forEach((card) => {
+        document.querySelectorAll('.painting-card').forEach((card) => {
             if (filter === 'all' || card.dataset.category === filter) {
                 setTimeout(() => {
                     card.style.display = '';
                     card.style.opacity = '0';
-                    card.style.transform = 'translateY(40px) rotateX(10deg) scale(0.9)';
+                    card.style.transform = 'translateY(40px) scale(0.9)';
                     setTimeout(() => {
                         card.style.opacity = '1';
-                        card.style.transform = 'translateY(0) rotateX(0deg) scale(1)';
+                        card.style.transform = 'translateY(0) scale(1)';
                     }, 50);
                 }, delay);
                 delay += 120;
@@ -445,26 +496,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// ===== 3D Tilt on painting cards =====
-document.querySelectorAll('.painting-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 15;
-        const rotateY = (centerX - x) / 15;
-
-        card.style.transform = `translateY(-10px) perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-        card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 40px rgba(0,0,0,0.12)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-        card.style.boxShadow = '';
-    });
-});
+// (3D tilt is initialised in initPaintingCards after dynamic gallery loads)
 
 // ===== Cursor glow on gallery =====
 const gallerySection = document.querySelector('.gallery-section');
@@ -502,7 +534,7 @@ const priceObserver = new IntersectionObserver((entries) => {
     });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('.painting-price').forEach(el => priceObserver.observe(el));
+// (priceObserver.observe called in initPaintingCards after dynamic gallery loads)
 
 // ===== Magnetic effect on buttons =====
 document.querySelectorAll('.btn-primary').forEach(btn => {
@@ -517,28 +549,6 @@ document.querySelectorAll('.btn-primary').forEach(btn => {
     });
 });
 
-// ===== Text reveal for about section =====
-const aboutText = document.querySelector('.about-text');
-if (aboutText) {
-    const textObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const paragraphs = entry.target.querySelectorAll('p, h2');
-                paragraphs.forEach((p, i) => {
-                    p.style.opacity = '0';
-                    p.style.transform = 'translateY(30px)';
-                    p.style.transition = `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.15}s`;
-                    setTimeout(() => {
-                        p.style.opacity = '1';
-                        p.style.transform = 'translateY(0)';
-                    }, 100);
-                });
-                textObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-    textObserver.observe(aboutText);
-}
 
 // ===== Typing effect for hero subtitle =====
 const heroSubtitle = document.querySelector('.hero-subtitle');

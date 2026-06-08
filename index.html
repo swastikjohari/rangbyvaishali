@@ -153,90 +153,21 @@
             <button class="filter-btn" data-filter="spiritual">Spiritual</button>
         </div>
 
-        <div class="gallery-grid stagger-children">
-            <div class="painting-card" data-category="portrait" data-id="the-poppy-girl">
-                <div class="painting-image">
-                    <img src="images/poppy-girl.jpg" alt="Portrait of a woman with a red poppy flower - Acrylic painting by Vaishali">
-                </div>
-                <div class="painting-info">
-                    <h3>The Poppy Girl</h3>
-                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
-                    <div class="painting-footer">
-                        <span class="painting-price">₹2,999</span>
-                        <button class="btn btn-small add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="painting-card" data-category="landscape" data-id="deep-blue">
-                <div class="painting-image">
-                    <img src="images/deep-blue.jpg" alt="Deep blue ocean waves seascape - Acrylic painting by Vaishali">
-                </div>
-                <div class="painting-info">
-                    <h3>Deep Blue</h3>
-                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
-                    <div class="painting-footer">
-                        <span class="painting-price">₹1,499</span>
-                        <button class="btn btn-small add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="painting-card" data-category="landscape" data-id="golden-shore">
-                <div class="painting-image">
-                    <img src="images/golden-shore.jpg" alt="Tropical beach with golden sand and turquoise waves - Acrylic painting by Vaishali">
-                </div>
-                <div class="painting-info">
-                    <h3>Golden Shore</h3>
-                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
-                    <div class="painting-footer">
-                        <span class="painting-price">₹1,999</span>
-                        <button class="btn btn-small add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="painting-card" data-category="spiritual" data-id="ardhanarishvara">
-                <div class="painting-image">
-                    <img src="images/shiv-parvati.jpg" alt="Shiv and Parvati in blue and gold - Acrylic painting by Vaishali">
-                </div>
-                <div class="painting-info">
-                    <h3>Ardhanarishvara</h3>
-                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
-                    <div class="painting-footer">
-                        <span class="painting-price">₹1,999</span>
-                        <button class="btn btn-small add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="painting-card" data-category="spiritual" data-id="eternal-love">
-                <div class="painting-image">
-                    <img src="images/radha-krishna.jpg" alt="Radha and Krishna in vibrant colours with peacock motif - Acrylic painting by Vaishali">
-                </div>
-                <div class="painting-info">
-                    <h3>Eternal Love</h3>
-                    <p class="painting-medium">Acrylic on Canvas • 18×24 in</p>
-                    <div class="painting-footer">
-                        <span class="painting-price">₹1,999</span>
-                        <button class="btn btn-small add-to-cart">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- paintings loaded dynamically from data/paintings.json -->
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about-section">
-        <div class="about-content">
-            <div class="about-image reveal-left">
-                <img src="images/about.png" alt="Vaishali - Artist behind Rang" class="about-photo">
-            </div>
-            <div class="about-text reveal-right">
-                <h2>About the Artist</h2>
-                <p class="about-lead">Vaishali is a passionate artist whose bold use of colour and expressive brushwork brings every canvas to life.</p>
-                <p>From serene seascapes to vibrant spiritual art, her work spans portraits, landscapes, and Indian mythology — each piece telling its own story through rich acrylics and fearless colour palettes.</p>
-                <p>"Rang" means colour in Hindi — and this gallery is her way of sharing those colours with the world. Every painting is original, handmade, and one of a kind.</p>
+        <div class="about-quote-bg" style="background-image: url('images/radha-krishna.jpg')">
+            <div class="about-quote-overlay">
+                <div class="about-quote-content reveal">
+                    <span class="about-quote-mark">"</span>
+                    <blockquote class="about-blockquote">Rang means colour — and this gallery is my way of sharing those colours with the world.</blockquote>
+                    <p class="about-attribution">— Vaishali</p>
+                    <p class="about-tagline">Every painting is original, handmade, and one of a kind.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -311,7 +242,17 @@
         </div>
     </footer>
 
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="script.js"></script>
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', user => {
+                if (!user) {
+                    window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
+                }
+            });
+        }
+    </script>
 </body>
 </html>
