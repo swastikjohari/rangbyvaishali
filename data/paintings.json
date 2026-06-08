@@ -6,7 +6,7 @@
       "price": "₹2,999",
       "image": "images/poppy-girl.jpg",
       "category": "portrait",
-      "sold": false
+      "sold": true
     },
     {
       "name": "Deep Blue",
