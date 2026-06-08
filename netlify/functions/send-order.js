@@ -48,8 +48,10 @@ async function sendEmail(shipping, message, total) {
             }),
         });
         const data = await res.json();
+        console.log('Web3Forms response:', JSON.stringify(data));
         return data.success === true;
-    } catch {
+    } catch (err) {
+        console.error('Web3Forms error:', err.message);
         return false;
     }
 }
