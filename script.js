@@ -249,10 +249,23 @@ function renderGallery(paintings) {
         const id = paintingIdFromName(p.name);
         const soldClass = p.sold ? ' sold-out' : '';
         const btnText = p.sold ? 'Sold Out' : 'Add to Cart';
+        // Support both old single `image` field and new `images` array
+        const imgs = p.images ? p.images.map(i => i.src || i) : [p.image];
+        const firstImg = imgs[0];
+        const multiImg = imgs.length > 1;
+        const dotsHtml = multiImg
+            ? `<div class="carousel-dots">${imgs.map((_, i) => `<span class="carousel-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</div>`
+            : '';
+        const arrowsHtml = multiImg
+            ? `<button class="carousel-btn carousel-prev" aria-label="Previous">&#8249;</button>
+               <button class="carousel-btn carousel-next" aria-label="Next">&#8250;</button>`
+            : '';
         return `
-        <div class="painting-card${soldClass}" data-category="${p.category}" data-id="${id}">
+        <div class="painting-card${soldClass}" data-category="${p.category}" data-id="${id}" data-images='${JSON.stringify(imgs)}'>
             <div class="painting-image">
-                <img src="${p.image}" alt="${p.name} - Acrylic painting by Vaishali" loading="lazy">
+                <img src="${firstImg}" alt="${p.name} - Acrylic painting by Vaishali" loading="lazy">
+                ${arrowsHtml}
+                ${dotsHtml}
             </div>
             <div class="painting-info">
                 <h3>${p.name}</h3>
@@ -332,6 +345,40 @@ function initPaintingCards() {
             card.style.transform = '';
             card.style.boxShadow = '';
         });
+    });
+
+    // Carousel
+    document.querySelectorAll('.painting-card').forEach(card => {
+        const imgs = JSON.parse(card.dataset.images || '[]');
+        if (imgs.length <= 1) return;
+        let current = 0;
+        const img = card.querySelector('.painting-image img');
+        const dots = card.querySelectorAll('.carousel-dot');
+
+        function goTo(index) {
+            current = (index + imgs.length) % imgs.length;
+            img.style.opacity = '0';
+            img.style.transform = 'scale(0.97)';
+            setTimeout(() => {
+                img.src = imgs[current];
+                img.style.opacity = '1';
+                img.style.transform = 'scale(1)';
+            }, 180);
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+        }
+
+        card.querySelector('.carousel-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            goTo(current - 1);
+        });
+        card.querySelector('.carousel-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            goTo(current + 1);
+        });
+        dots.forEach((dot, i) => dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goTo(i);
+        }));
     });
 
     // Price counter animation

@@ -774,6 +774,72 @@ h2 {
     font-style: italic;
 }
 
+/* ===== Carousel ===== */
+.painting-image {
+    position: relative;
+}
+
+.painting-image img {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+}
+
+.carousel-prev { left: 10px; }
+.carousel-next { right: 10px; }
+
+.painting-card:hover .carousel-btn {
+    opacity: 1;
+}
+
+.carousel-btn:hover {
+    background: #fff;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.carousel-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.carousel-dot.active {
+    background: #fff;
+    transform: scale(1.3);
+}
+
+/* ===== Painting Info ===== */
 .painting-info {
     padding: 24px;
 }
