@@ -572,7 +572,7 @@ window.addEventListener('scroll', () => {
 });
 
 // ===== Razorpay Checkout =====
-const RAZORPAY_KEY_ID = 'rzp_test_Sz41e5EQycslxR';
+const RAZORPAY_KEY_ID = 'rzp_live_SvmqTcVe3TN8Aj';
 const WHATSAPP_NUMBER = '919457162999';
 
 const checkoutPanel = document.querySelector('.checkout-panel');
@@ -645,6 +645,10 @@ checkoutForm.addEventListener('submit', async (e) => {
 
         if (!response.ok) {
             throw new Error(order.error || 'Failed to create order');
+        }
+
+        if (!order.id) {
+            throw new Error('Order ID missing from server response');
         }
 
         const options = {
