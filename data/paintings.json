@@ -4,7 +4,14 @@
       "name": "The Poppy Girl",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹2,999",
-      "images": [{ "src": "images/poppy-girl.jpg" }],
+      "images": [
+        {
+          "src": "images/poppy-girl.jpg"
+        },
+        "images/3a4361d5-c468-4d05-86d0-169797d73937.png",
+        "images/5f1d5bb1-19fc-4acf-a6c9-fbca6f1020ef.png",
+        "images/d48e66fd-e589-465f-9dc0-709125e5dc37.png"
+      ],
       "category": "portrait",
       "sold": false
     },
@@ -12,7 +19,11 @@
       "name": "Deep Blue",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,499",
-      "images": [{ "src": "images/deep-blue.jpg" }],
+      "images": [
+        {
+          "src": "images/deep-blue.jpg"
+        }
+      ],
       "category": "landscape",
       "sold": false
     },
@@ -20,7 +31,11 @@
       "name": "Golden Shore",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
-      "images": [{ "src": "images/golden-shore.jpg" }],
+      "images": [
+        {
+          "src": "images/golden-shore.jpg"
+        }
+      ],
       "category": "landscape",
       "sold": false
     },
@@ -28,7 +43,11 @@
       "name": "Ardhanarishvara",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
-      "images": [{ "src": "images/shiv-parvati.jpg" }],
+      "images": [
+        {
+          "src": "images/shiv-parvati.jpg"
+        }
+      ],
       "category": "spiritual",
       "sold": false
     },
@@ -36,7 +55,11 @@
       "name": "Eternal Love",
       "medium": "Acrylic on Canvas • 18×24 in",
       "price": "₹1,999",
-      "images": [{ "src": "images/radha-krishna.jpg" }],
+      "images": [
+        {
+          "src": "images/radha-krishna.jpg"
+        }
+      ],
       "category": "spiritual",
       "sold": false
     }
