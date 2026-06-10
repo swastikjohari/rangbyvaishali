@@ -22,7 +22,10 @@
       "images": [
         {
           "src": "images/deep-blue.jpg"
-        }
+        },
+        "images/42d33ccf-69e4-4884-b977-d1075674481b.png",
+        "images/f3bd3c18-b5b6-468d-b040-31ed39e98a15.png",
+        "images/428ce49d-392d-4143-8483-f64abeaafc89.png"
       ],
       "category": "landscape",
       "sold": false
