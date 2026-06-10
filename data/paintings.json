@@ -37,7 +37,10 @@
       "images": [
         {
           "src": "images/golden-shore.jpg"
-        }
+        },
+        "images/5784064b-82d1-40a2-94d9-b71dc1144f22.png",
+        "images/a0e33e97-51af-4ba8-95ca-b1399d182c71.png",
+        "images/db3663d4-044a-451d-8720-bf2a49580159.png"
       ],
       "category": "landscape",
       "sold": false
