@@ -1264,9 +1264,16 @@ h2 {
     position: relative;
     background: #f5f0ea;
     display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+.modal-img-wrap {
+    position: relative;
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100%;
+    min-height: 300px;
 }
 .painting-modal-img {
     width: 100%;
@@ -1274,9 +1281,59 @@ h2 {
     object-fit: contain;
     display: block;
     transition: opacity 0.15s ease;
-    max-height: 100vh;
+    max-height: 70vh;
     padding: 24px;
     box-sizing: border-box;
+}
+/* Modal arrows — always visible */
+.modal-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.92);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: background 0.2s, transform 0.2s;
+}
+.modal-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+.modal-arrow-prev { left: 12px; }
+.modal-arrow-next { right: 12px; }
+/* Thumbnail strip */
+.modal-thumbnails {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: #ede8e1;
+    flex-shrink: 0;
+}
+.modal-thumbnails:empty { display: none; }
+.modal-thumb {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0.55;
+    border: 2px solid transparent;
+    transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+}
+.modal-thumb:hover { opacity: 0.85; transform: scale(1.05); }
+.modal-thumb.active {
+    opacity: 1;
+    border-color: var(--color-accent);
 }
 .painting-modal-details {
     padding: 40px 36px;

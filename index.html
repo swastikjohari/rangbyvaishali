@@ -107,7 +107,7 @@
     <header class="hero">
         <!-- Hero video background (loaded dynamically from site.json) -->
         <div class="hero-video-wrap" id="hero-video-wrap" style="display:none">
-            <video id="hero-video" autoplay muted loop playsinline></video>
+            <video id="hero-video" autoplay muted loop playsinline webkit-playsinline></video>
             <div class="hero-video-overlay"></div>
         </div>
         <!-- Animated paint blobs (hidden when video is active) -->
@@ -246,10 +246,12 @@
         <div class="painting-modal-inner">
             <!-- Left: Image carousel -->
             <div class="painting-modal-gallery">
-                <img class="painting-modal-img" id="painting-modal-img" src="" alt="">
-                <button class="carousel-btn carousel-prev" id="modal-prev">&#8249;</button>
-                <button class="carousel-btn carousel-next" id="modal-next">&#8250;</button>
-                <div class="carousel-dots" id="modal-dots"></div>
+                <div class="modal-img-wrap">
+                    <img class="painting-modal-img" id="painting-modal-img" src="" alt="">
+                    <button class="modal-arrow modal-arrow-prev" id="modal-prev">&#8249;</button>
+                    <button class="modal-arrow modal-arrow-next" id="modal-next">&#8250;</button>
+                </div>
+                <div class="modal-thumbnails" id="modal-thumbnails"></div>
             </div>
             <!-- Right: Details -->
             <div class="painting-modal-details">

@@ -261,25 +261,36 @@ function openPaintingModal(card) {
     modalImg.src = imgs[0] || '';
     modalImg.alt = name;
 
-    // Dots
-    modalDots.innerHTML = imgs.length > 1
-        ? imgs.map((_, i) => `<span class="carousel-dot${i === 0 ? ' active' : ''}"></span>`).join('')
-        : '';
-    const dots = modalDots.querySelectorAll('.carousel-dot');
-    document.getElementById('modal-prev').style.display = imgs.length > 1 ? '' : 'none';
-    document.getElementById('modal-next').style.display = imgs.length > 1 ? '' : 'none';
+    // Thumbnails
+    const modalThumbsEl = document.getElementById('modal-thumbnails');
+    const prevBtn = document.getElementById('modal-prev');
+    const nextBtn = document.getElementById('modal-next');
+
+    if (imgs.length > 1) {
+        modalThumbsEl.innerHTML = imgs.map((src, i) =>
+            `<img class="modal-thumb${i === 0 ? ' active' : ''}" src="${src}" alt="${name} view ${i+1}" data-index="${i}">`
+        ).join('');
+        prevBtn.style.display = '';
+        nextBtn.style.display = '';
+    } else {
+        modalThumbsEl.innerHTML = '';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    }
+
+    const thumbs = modalThumbsEl.querySelectorAll('.modal-thumb');
 
     function modalGoTo(index) {
         modalCurrent = (index + imgs.length) % imgs.length;
         modalImg.style.opacity = '0';
         modalImg.src = imgs[modalCurrent];
         requestAnimationFrame(() => requestAnimationFrame(() => { modalImg.style.opacity = '1'; }));
-        dots.forEach((d, i) => d.classList.toggle('active', i === modalCurrent));
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === modalCurrent));
     }
 
-    document.getElementById('modal-prev').onclick = () => modalGoTo(modalCurrent - 1);
-    document.getElementById('modal-next').onclick = () => modalGoTo(modalCurrent + 1);
-    dots.forEach((dot, i) => { dot.onclick = () => modalGoTo(i); });
+    prevBtn.onclick = () => modalGoTo(modalCurrent - 1);
+    nextBtn.onclick = () => modalGoTo(modalCurrent + 1);
+    thumbs.forEach((t, i) => { t.onclick = () => modalGoTo(i); });
 
     // Cart button
     const cartBtn = document.getElementById('modal-add-cart');
@@ -323,6 +334,8 @@ fetch('/data/site.json')
         const video = document.getElementById('hero-video');
         const blobs = document.getElementById('hero-blobs');
         video.src = site.hero_video;
+        video.load(); // required for iOS autoplay
+        video.play().catch(() => {}); // catch if browser blocks autoplay
         wrap.style.display = 'block';
         document.querySelector('.hero').classList.add('has-video');
         if (blobs) blobs.style.display = 'none';
