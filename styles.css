@@ -510,19 +510,20 @@ h2 {
     grid-template-columns: 1fr 1fr;
     align-items: center;
     padding: 120px 60px 80px;
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
     gap: 60px;
     position: relative;
     overflow: hidden;
 }
 
-/* Hero video background */
+/* Hero video background — scoped inside hero only */
 .hero-video-wrap {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .hero-video-wrap video {
@@ -534,13 +535,27 @@ h2 {
 .hero-video-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(250, 248, 245, 0.55);
+    background: rgba(20, 12, 5, 0.45);
 }
 
-/* When video is active, hide the right-side painting frame */
+/* When video is active — centre content, hide painting frame */
+.hero.has-video {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+}
 .hero.has-video .hero-visual { display: none; }
-.hero.has-video { grid-template-columns: 1fr; max-width: 800px; text-align: center; }
-.hero.has-video .hero-content { padding: 0 20px; }
+.hero.has-video .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    padding: 0 24px;
+}
+/* Light text on dark video overlay */
+.hero.has-video .hero-title,
+.hero.has-video .hero-subtitle,
+.hero.has-video .hero-description { color: #f5f0ea; }
+.hero.has-video .hero-subtitle { opacity: 0.75; }
 
 /* Animated colour blobs */
 .hero-blobs {
@@ -724,6 +739,8 @@ h2 {
     padding: 100px 40px;
     max-width: var(--max-width);
     margin: 0 auto;
+    position: relative;
+    background: var(--color-bg);
 }
 
 .gallery-filters {
