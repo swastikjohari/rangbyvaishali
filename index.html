@@ -196,7 +196,11 @@
             <h2>Get in Touch</h2>
             <p>Interested in a custom piece or have questions? Reach out — Vaishali would love to hear from you.</p>
         </div>
-        <form class="contact-form" aria-label="Contact form">
+        <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" aria-label="Contact form">
+            <input type="hidden" name="access_key" value="9b621e61-207a-49d0-821d-51276c15eadc">
+            <input type="hidden" name="subject" value="New message from Rang by Vaishali website">
+            <input type="hidden" name="from_name" value="Rang by Vaishali Contact">
+            <input type="checkbox" name="botcheck" style="display:none">
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Name</label>

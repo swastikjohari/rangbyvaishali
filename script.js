@@ -598,20 +598,43 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===== Contact Form with Confetti =====
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const submitBtn = contactForm.querySelector('button[type="submit"]');
-        submitBtn.textContent = 'Message Sent ✓';
-        submitBtn.style.background = '#4a7c59';
-        submitBtn.style.transform = 'scale(1.05)';
-        createConfetti(submitBtn);
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
 
-        setTimeout(() => {
-            submitBtn.textContent = 'Send Message';
-            submitBtn.style.background = '';
-            submitBtn.style.transform = '';
-            contactForm.reset();
-        }, 3000);
+        try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: new FormData(contactForm)
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                submitBtn.textContent = 'Message Sent ✓';
+                submitBtn.style.background = '#4a7c59';
+                submitBtn.style.transform = 'scale(1.05)';
+                createConfetti(submitBtn);
+                contactForm.reset();
+                setTimeout(() => {
+                    submitBtn.textContent = 'Send Message';
+                    submitBtn.style.background = '';
+                    submitBtn.style.transform = '';
+                    submitBtn.disabled = false;
+                }, 3000);
+            } else {
+                throw new Error('Failed');
+            }
+        } catch {
+            submitBtn.textContent = 'Failed — try again';
+            submitBtn.style.background = '#c0392b';
+            submitBtn.disabled = false;
+            setTimeout(() => {
+                submitBtn.textContent = 'Send Message';
+                submitBtn.style.background = '';
+            }, 3000);
+        }
     });
 }
 
