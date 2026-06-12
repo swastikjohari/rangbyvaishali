@@ -467,12 +467,22 @@ function initPaintingCards() {
     document.querySelectorAll('.painting-price').forEach(el => priceObserver.observe(el));
 }
 
+// Show skeleton cards while paintings load
+document.getElementById('gallery-grid').innerHTML = Array(4).fill(`
+    <div class="skeleton-card">
+        <div class="skeleton-img skeleton-pulse"></div>
+        <div class="skeleton-info">
+            <div class="skeleton-line skeleton-pulse" style="width:70%"></div>
+            <div class="skeleton-line skeleton-pulse" style="width:45%"></div>
+            <div class="skeleton-line skeleton-pulse" style="width:55%;margin-top:12px"></div>
+        </div>
+    </div>`).join('');
+
 fetch('/data/paintings.json')
     .then(r => r.json())
     .then(data => {
         renderGallery(data.paintings || []);
         initPaintingCards();
-        // sold status is read directly from paintings.json (managed via /admin)
     })
     .catch(() => {
         document.getElementById('gallery-grid').innerHTML =
