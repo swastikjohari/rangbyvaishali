@@ -75,13 +75,22 @@
         "/images/2c52a21e-7421-49ca-a2de-86720bcfb965.png",
         "/images/813bf7a2-7f54-4d17-89c4-b1ca0fa8bf3f.png"
       ],
-      "name": "Acrylic painting ",
+      "name": "Narnia",
       "medium": "18*24",
       "price": "1,599",
       "category": "landscape"
     },
     {
-      "sold": false
+      "sold": false,
+      "name": "Behind the Shades",
+      "medium": "18*24",
+      "price": "2,999",
+      "images": [
+        "/images/b1c3b178-2e14-4350-a9b9-84354867b218.png",
+        "/images/a5b77f91-e806-4689-b69c-4456fb65fc18.png",
+        "/images/e935bd36-b3b0-42cc-8f1d-68839a66f707.png"
+      ],
+      "category": "abstract"
     }
   ]
 }
