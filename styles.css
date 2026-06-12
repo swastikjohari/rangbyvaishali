@@ -557,10 +557,11 @@ h2 {
     text-shadow: 0 2px 24px rgba(0,0,0,0.45);
 }
 .hero.has-video .hero-subtitle {
-    color: #e8c99a;
+    color: #ffffff;
     opacity: 1;
     letter-spacing: 0.2em;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 12px rgba(0,0,0,0.6);
+    font-weight: 500;
 }
 .hero.has-video .hero-description {
     color: rgba(255,255,255,0.88);
