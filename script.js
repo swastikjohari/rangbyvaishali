@@ -607,9 +607,18 @@ if (contactForm) {
         try {
             const res = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: new FormData(contactForm)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    access_key: '9b621e61-207a-49d0-821d-51276c15eadc',
+                    subject: 'New message from Rang by Vaishali website',
+                    from_name: 'Rang by Vaishali Contact',
+                    name: contactForm.querySelector('[name="name"]').value,
+                    email: contactForm.querySelector('[name="email"]').value,
+                    message: contactForm.querySelector('[name="message"]').value,
+                })
             });
             const data = await res.json();
+            console.log('Web3Forms response:', data);
 
             if (data.success) {
                 submitBtn.textContent = 'Message Sent ✓';
