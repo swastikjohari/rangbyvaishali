@@ -113,8 +113,13 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <!-- Animated paint blobs -->
-        <div class="hero-blobs">
+        <!-- Hero video background (loaded dynamically from site.json) -->
+        <div class="hero-video-wrap" id="hero-video-wrap" style="display:none">
+            <video id="hero-video" autoplay muted loop playsinline></video>
+            <div class="hero-video-overlay"></div>
+        </div>
+        <!-- Animated paint blobs (hidden when video is active) -->
+        <div class="hero-blobs" id="hero-blobs">
             <div class="blob blob-1"></div>
             <div class="blob blob-2"></div>
             <div class="blob blob-3"></div>
@@ -132,7 +137,7 @@
             <p class="hero-description">Each piece is a unique expression of emotion, crafted with love by Vaishali. Bring home art that speaks to your soul.</p>
             <a href="#gallery" class="btn btn-primary">Explore Collection</a>
         </div>
-        <div class="hero-visual">
+        <div class="hero-visual" id="hero-visual">
             <div class="hero-frame">
                 <img src="images/shiv-parvati.jpg" alt="Featured painting - Shiv Parvati by Vaishali" class="hero-painting">
             </div>

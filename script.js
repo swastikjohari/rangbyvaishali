@@ -243,6 +243,21 @@ function paintingIdFromName(name) {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+// ===== Hero Video =====
+fetch('/data/site.json')
+    .then(r => r.json())
+    .then(site => {
+        if (!site.hero_video) return;
+        const wrap = document.getElementById('hero-video-wrap');
+        const video = document.getElementById('hero-video');
+        const blobs = document.getElementById('hero-blobs');
+        video.src = site.hero_video;
+        wrap.style.display = 'block';
+        document.querySelector('.hero').classList.add('has-video');
+        if (blobs) blobs.style.display = 'none';
+    })
+    .catch(() => {});
+
 function renderGallery(paintings) {
     const grid = document.getElementById('gallery-grid');
     grid.innerHTML = paintings.map(p => {
@@ -330,22 +345,7 @@ function initPaintingCards() {
         });
     });
 
-    // 3D tilt
-    document.querySelectorAll('.painting-card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const rotateX = (y - rect.height / 2) / 15;
-            const rotateY = (rect.width / 2 - x) / 15;
-            card.style.transform = `translateY(-10px) perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-            card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 40px rgba(0,0,0,0.12)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-            card.style.boxShadow = '';
-        });
-    });
+    // (tilt removed)
 
     // Carousel
     document.querySelectorAll('.painting-card').forEach(card => {

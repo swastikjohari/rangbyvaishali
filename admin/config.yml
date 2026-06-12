@@ -3,9 +3,19 @@ backend:
   branch: main
 
 media_folder: images
-public_folder: images
+public_folder: /images
 
 collections:
+  - name: settings
+    label: Site Settings
+    files:
+      - name: site
+        label: Hero & Branding
+        file: data/site.json
+        format: json
+        fields:
+          - { label: Hero Video, name: hero_video, widget: file, allow_multiple: false, hint: "Upload an MP4 video. Shown as background in the hero section." }
+
   - name: gallery
     label: Gallery
     files:
