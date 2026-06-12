@@ -68,6 +68,20 @@
       ],
       "category": "spiritual",
       "sold": false
+    },
+    {
+      "sold": false,
+      "images": [
+        "/images/2c52a21e-7421-49ca-a2de-86720bcfb965.png",
+        "/images/813bf7a2-7f54-4d17-89c4-b1ca0fa8bf3f.png"
+      ],
+      "name": "Acrylic painting ",
+      "medium": "18*24",
+      "price": "1,599",
+      "category": "landscape"
+    },
+    {
+      "sold": false
     }
   ]
 }
