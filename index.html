@@ -10,14 +10,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Page Loader -->
-    <div class="page-loader">
-        <div class="loader-content">
-            <span class="loader-text">Rang</span>
-            <span class="loader-subtext">by Vaishali</span>
-            <div class="loader-bar"><div class="loader-progress"></div></div>
-        </div>
-    </div>
 
     <!-- Floating Particles -->
     <canvas id="particles-canvas"></canvas>
@@ -246,6 +238,47 @@
             <p>&copy; 2026 Rang by Vaishali. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Painting Detail Modal -->
+    <div class="painting-modal-overlay" id="painting-modal-overlay"></div>
+    <div class="painting-modal" id="painting-modal" role="dialog" aria-modal="true">
+        <button class="painting-modal-close" id="painting-modal-close" aria-label="Close">&times;</button>
+        <div class="painting-modal-inner">
+            <!-- Left: Image carousel -->
+            <div class="painting-modal-gallery">
+                <img class="painting-modal-img" id="painting-modal-img" src="" alt="">
+                <button class="carousel-btn carousel-prev" id="modal-prev">&#8249;</button>
+                <button class="carousel-btn carousel-next" id="modal-next">&#8250;</button>
+                <div class="carousel-dots" id="modal-dots"></div>
+            </div>
+            <!-- Right: Details -->
+            <div class="painting-modal-details">
+                <h2 class="painting-modal-name" id="modal-name"></h2>
+                <p class="painting-modal-medium" id="modal-medium"></p>
+                <p class="painting-modal-price" id="modal-price"></p>
+                <p class="painting-modal-desc" id="modal-desc"></p>
+                <button class="btn btn-primary painting-modal-cart" id="modal-add-cart">Add to Cart</button>
+                <div class="painting-modal-policies">
+                    <details class="policy-section">
+                        <summary>Shipping & Delivery</summary>
+                        <p>All paintings are carefully packed with bubble wrap and cardboard reinforcement. Standard delivery takes 5–7 business days within India. Tracking details are shared via WhatsApp once the order is dispatched.</p>
+                    </details>
+                    <details class="policy-section">
+                        <summary>Refund Policy</summary>
+                        <p>Since every painting is a one-of-a-kind original artwork, we do not accept returns or exchanges. However, if your painting arrives damaged during transit, please contact us within 48 hours with photos and we will resolve it promptly.</p>
+                    </details>
+                    <details class="policy-section">
+                        <summary>Terms & Conditions</summary>
+                        <p>By purchasing, you agree that all sales are final for original artworks. The artwork remains the intellectual property of Vaishali Johari. Reproduction, copying, or resale of the artwork without written consent is not permitted. Images of the artwork may be used by Rang by Vaishali for portfolio and promotional purposes.</p>
+                    </details>
+                    <details class="policy-section">
+                        <summary>About the Artist</summary>
+                        <p>Vaishali is a passionate artist whose bold use of colour and expressive brushwork brings every canvas to life. From serene seascapes to vibrant spiritual art, each piece tells its own story through rich acrylics and fearless colour palettes.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

@@ -39,4 +39,5 @@ collections:
                 summary: "{{fields.src}}"
                 field: { label: Image, name: src, widget: image }
               - { label: Category, name: category, widget: select, options: [portrait, landscape, spiritual, abstract, floral] }
+              - { label: Description, name: description, widget: text, required: false, hint: "Short description shown in the painting detail panel" }
               - { label: Sold Out, name: sold, widget: boolean, default: false, hint: "Toggle on when this painting is sold" }

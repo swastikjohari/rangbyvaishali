@@ -1174,80 +1174,151 @@ h2 {
 }
 
 /* ===== Page Loader ===== */
-.page-loader {
+/* ===== Painting Detail Modal ===== */
+.painting-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,12,5,0.6);
+    z-index: 8000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.painting-modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+.painting-modal {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    right: 0;
     height: 100%;
+    width: min(860px, 100vw);
     background: var(--color-bg);
+    z-index: 8001;
+    transform: translateX(100%);
+    transition: transform 0.38s cubic-bezier(0.16,1,0.3,1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.painting-modal.open {
+    transform: translateX(0);
+}
+.painting-modal-close {
+    position: sticky;
+    top: 0;
+    align-self: flex-end;
+    margin: 16px 20px 0;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    line-height: 1;
+    z-index: 10;
+}
+.painting-modal-close:hover { color: var(--color-text); }
+.painting-modal-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    flex: 1;
+}
+.painting-modal-gallery {
+    position: relative;
+    background: #1a1210;
+    min-height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
-    transition: opacity 0.8s ease, visibility 0.8s ease;
 }
-
-.page-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-.loader-content {
-    text-align: center;
-}
-
-.loader-text {
-    font-family: var(--font-display);
-    font-size: 4rem;
-    display: block;
-    margin-bottom: 4px;
-    background: linear-gradient(90deg, #e74c3c, #f39c12, #c9a96e, #8b5e3c, #8b4d7a, #6bb5c9, #e74c3c);
-    background-size: 300% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: logoHue 3s linear infinite;
-}
-
-.loader-subtext {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.6rem;
-    color: var(--color-text-muted);
-    font-style: normal;
-    display: block;
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeInSoft 0.8s ease 0.5s forwards;
-}
-
-@keyframes fadeInSoft {
-    to { opacity: 1; }
-}
-
-@keyframes loaderPulse {
-    0%, 100% { opacity: 0.4; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1); }
-}
-
-.loader-bar {
-    width: 200px;
-    height: 2px;
-    background: var(--color-border);
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 0 auto;
-}
-
-.loader-progress {
-    width: 0%;
+.painting-modal-img {
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
-    animation: loaderFill 2s ease-in-out forwards;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.15s ease;
 }
-
-@keyframes loaderFill {
-    to { width: 100%; }
+.painting-modal-details {
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+}
+.painting-modal-name {
+    font-size: 1.9rem;
+    margin-bottom: 4px;
+}
+.painting-modal-medium {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+}
+.painting-modal-price {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    margin: 4px 0 8px;
+}
+.painting-modal-desc {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+.painting-modal-cart {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.painting-modal-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+/* Policy accordions */
+.painting-modal-policies {
+    border-top: 1px solid var(--color-border);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.policy-section {
+    border-bottom: 1px solid var(--color-border);
+}
+.policy-section summary {
+    padding: 14px 0;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-text);
+}
+.policy-section summary::after {
+    content: '+';
+    font-size: 1.2rem;
+    color: var(--color-accent);
+    transition: transform 0.2s ease;
+}
+.policy-section[open] summary::after {
+    transform: rotate(45deg);
+}
+.policy-section p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    padding-bottom: 14px;
+}
+@media (max-width: 640px) {
+    .painting-modal-inner { grid-template-columns: 1fr; }
+    .painting-modal-gallery { min-height: 280px; }
 }
 
 /* ===== Scroll Progress Bar ===== */

@@ -1,9 +1,3 @@
-// ===== Page Loader =====
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        document.querySelector('.page-loader').classList.add('hidden');
-    }, 2500);
-});
 
 // ===== Paint Splatter on Click/Tap =====
 function createSplatter(x, y) {
@@ -243,6 +237,83 @@ function paintingIdFromName(name) {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+// ===== Painting Detail Modal =====
+const paintingModal = document.getElementById('painting-modal');
+const paintingModalOverlay = document.getElementById('painting-modal-overlay');
+
+function openPaintingModal(card) {
+    const imgs = JSON.parse(card.dataset.images || '[]');
+    const name = card.querySelector('h3').textContent;
+    const medium = card.querySelector('.painting-medium').textContent;
+    const price = card.querySelector('.painting-price').textContent;
+    const isSold = card.classList.contains('sold-out');
+
+    // Populate fields
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-medium').textContent = medium;
+    document.getElementById('modal-price').textContent = price;
+    document.getElementById('modal-desc').textContent = card.dataset.description || '';
+
+    // Gallery
+    let modalCurrent = 0;
+    const modalImg = document.getElementById('painting-modal-img');
+    const modalDots = document.getElementById('modal-dots');
+    modalImg.src = imgs[0] || '';
+    modalImg.alt = name;
+
+    // Dots
+    modalDots.innerHTML = imgs.length > 1
+        ? imgs.map((_, i) => `<span class="carousel-dot${i === 0 ? ' active' : ''}"></span>`).join('')
+        : '';
+    const dots = modalDots.querySelectorAll('.carousel-dot');
+    document.getElementById('modal-prev').style.display = imgs.length > 1 ? '' : 'none';
+    document.getElementById('modal-next').style.display = imgs.length > 1 ? '' : 'none';
+
+    function modalGoTo(index) {
+        modalCurrent = (index + imgs.length) % imgs.length;
+        modalImg.style.opacity = '0';
+        modalImg.src = imgs[modalCurrent];
+        requestAnimationFrame(() => requestAnimationFrame(() => { modalImg.style.opacity = '1'; }));
+        dots.forEach((d, i) => d.classList.toggle('active', i === modalCurrent));
+    }
+
+    document.getElementById('modal-prev').onclick = () => modalGoTo(modalCurrent - 1);
+    document.getElementById('modal-next').onclick = () => modalGoTo(modalCurrent + 1);
+    dots.forEach((dot, i) => { dot.onclick = () => modalGoTo(i); });
+
+    // Cart button
+    const cartBtn = document.getElementById('modal-add-cart');
+    if (isSold) {
+        cartBtn.textContent = 'Sold Out';
+        cartBtn.disabled = true;
+    } else {
+        cartBtn.textContent = 'Add to Cart';
+        cartBtn.disabled = false;
+        cartBtn.onclick = () => {
+            cart.push({ name, price, paintingId: card.dataset.id });
+            updateCartCount();
+            renderCart();
+            cartBtn.textContent = 'Added ✓';
+            setTimeout(() => { cartBtn.textContent = 'Add to Cart'; }, 2000);
+        };
+    }
+
+    // Open
+    paintingModal.classList.add('open');
+    paintingModalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePaintingModal() {
+    paintingModal.classList.remove('open');
+    paintingModalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('painting-modal-close').addEventListener('click', closePaintingModal);
+paintingModalOverlay.addEventListener('click', closePaintingModal);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePaintingModal(); });
+
 // ===== Hero Video =====
 fetch('/data/site.json')
     .then(r => r.json())
@@ -276,7 +347,7 @@ function renderGallery(paintings) {
                <button class="carousel-btn carousel-next" aria-label="Next">&#8250;</button>`
             : '';
         return `
-        <div class="painting-card${soldClass}" data-category="${p.category}" data-id="${id}" data-images='${JSON.stringify(imgs)}'>
+        <div class="painting-card${soldClass}" data-category="${p.category}" data-id="${id}" data-images='${JSON.stringify(imgs)}' data-description="${(p.description || '').replace(/"/g, '&quot;')}">
             <div class="painting-image">
                 <img src="${firstImg}" alt="${p.name} - Acrylic painting by Vaishali" loading="lazy">
                 ${arrowsHtml}
@@ -347,9 +418,11 @@ function initPaintingCards() {
 
     // (tilt removed)
 
-    // Carousel
+    // Carousel — preload images for instant switching
     document.querySelectorAll('.painting-card').forEach(card => {
         const imgs = JSON.parse(card.dataset.images || '[]');
+        // Preload all images
+        imgs.forEach(src => { const i = new Image(); i.src = src; });
         if (imgs.length <= 1) return;
         let current = 0;
         const img = card.querySelector('.painting-image img');
@@ -358,27 +431,23 @@ function initPaintingCards() {
         function goTo(index) {
             current = (index + imgs.length) % imgs.length;
             img.style.opacity = '0';
-            img.style.transform = 'scale(0.97)';
-            setTimeout(() => {
-                img.src = imgs[current];
-                img.style.opacity = '1';
-                img.style.transform = 'scale(1)';
-            }, 180);
+            img.src = imgs[current]; // set immediately — already preloaded
+            requestAnimationFrame(() => requestAnimationFrame(() => { img.style.opacity = '1'; }));
             dots.forEach((d, i) => d.classList.toggle('active', i === current));
         }
 
-        card.querySelector('.carousel-prev').addEventListener('click', (e) => {
-            e.stopPropagation();
-            goTo(current - 1);
+        card.querySelector('.carousel-prev').addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
+        card.querySelector('.carousel-next').addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+        dots.forEach((dot, i) => dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); }));
+    });
+
+    // Click painting card → open detail modal
+    document.querySelectorAll('.painting-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return; // ignore button clicks
+            openPaintingModal(card);
         });
-        card.querySelector('.carousel-next').addEventListener('click', (e) => {
-            e.stopPropagation();
-            goTo(current + 1);
-        });
-        dots.forEach((dot, i) => dot.addEventListener('click', (e) => {
-            e.stopPropagation();
-            goTo(i);
-        }));
+        card.style.cursor = 'pointer';
     });
 
     // Price counter animation
