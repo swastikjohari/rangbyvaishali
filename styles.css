@@ -551,11 +551,24 @@ h2 {
     max-width: 760px;
     padding: 0 24px;
 }
-/* Light text on dark video overlay */
-.hero.has-video .hero-title,
-.hero.has-video .hero-subtitle,
-.hero.has-video .hero-description { color: #f5f0ea; }
-.hero.has-video .hero-subtitle { opacity: 0.75; }
+/* Bright text on video background */
+.hero.has-video .hero-title {
+    color: #ffffff;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.45);
+}
+.hero.has-video .hero-subtitle {
+    color: #e8c99a;
+    opacity: 1;
+    letter-spacing: 0.2em;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+.hero.has-video .hero-description {
+    color: rgba(255,255,255,0.88);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+}
+.hero.has-video .hero-video-overlay {
+    background: rgba(10, 6, 2, 0.52);
+}
 
 /* Animated colour blobs */
 .hero-blobs {
