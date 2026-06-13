@@ -91,6 +91,30 @@
         "/images/e935bd36-b3b0-42cc-8f1d-68839a66f707.png"
       ],
       "category": "abstract"
+    },
+    {
+      "sold": false,
+      "name": "Whispers in Blue",
+      "medium": "18*24",
+      "price": "2,999",
+      "images": [
+        "/images/2ef9ac81-86b9-42da-b806-b01fe1d56fcb.png",
+        "/images/6408ca93-8800-4b5e-aceb-f93c1ed42856.png",
+        "/images/06429f6f-3c83-4b5c-b302-e0d0d16396eb.png"
+      ],
+      "category": "abstract"
+    },
+    {
+      "sold": false,
+      "name": "Song of Stillness",
+      "medium": "18*24",
+      "price": "2,999",
+      "images": [
+        "/images/6baa97c6-e3f0-4b05-8329-7b7326ce2a59.png",
+        "/images/d982612a-44b6-4684-8b91-33329997fcda.png",
+        "/images/b475903b-ccf9-4796-86e4-f34141176a2a.png"
+      ],
+      "category": "abstract"
     }
   ]
 }
