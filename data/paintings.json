@@ -115,6 +115,29 @@
         "/images/b475903b-ccf9-4796-86e4-f34141176a2a.png"
       ],
       "category": "abstract"
+    },
+    {
+      "sold": false,
+      "name": "Lord krishna",
+      "medium": "10*12",
+      "price": "899",
+      "images": [
+        "/images/ba684dba-807c-499e-aec7-e745ad105c8e.png",
+        "/images/9764f883-504a-4a32-98e8-42ee9a5a787a.png",
+        "/images/24a8312b-ef33-4291-9fa6-9300f0aa9a53.png"
+      ],
+      "category": "spiritual"
+    },
+    {
+      "sold": false,
+      "name": "Midnight blue",
+      "medium": "10*12",
+      "price": "899",
+      "images": [
+        "/images/7f64ff65-b303-4ee6-86d8-9096ca7ce9b7.png",
+        "/images/a2f1b102-f2e1-435f-a1da-f79c12e83db8.png"
+      ],
+      "category": "landscape"
     }
   ]
 }
