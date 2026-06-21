@@ -138,6 +138,17 @@
         "/images/a2f1b102-f2e1-435f-a1da-f79c12e83db8.png"
       ],
       "category": "landscape"
+    },
+    {
+      "sold": true,
+      "name": "Together ",
+      "medium": "10*12",
+      "price": "899",
+      "images": [
+        "/images/ec7eb857-ac77-44e7-8d9d-27c8acdf994d.png",
+        "/images/28e59b3b-bdaa-4249-b5c5-eca0e84759e9.png"
+      ],
+      "category": "abstract"
     }
   ]
 }
