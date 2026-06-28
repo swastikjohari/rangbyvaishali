@@ -161,6 +161,18 @@
         "/images/4e41ac96-f9a4-4457-96c7-efa9a03a97ba.png"
       ],
       "category": "portrait"
+    },
+    {
+      "sold": false,
+      "images": [
+        "/images/12ad43b1-c5f5-4b6d-b4b0-3df2d3ae1f1b.png",
+        "/images/4e41ac96-f9a4-4457-96c7-efa9a03a97ba.png",
+        "/images/60887fe3-f8a7-465f-a3f1-c58037c035d1.png"
+      ],
+      "medium": "18*24",
+      "price": "1,599",
+      "category": "portrait",
+      "name": "Shades of human"
     }
   ]
 }
